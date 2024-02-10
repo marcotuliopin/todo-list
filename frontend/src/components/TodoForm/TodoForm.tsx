@@ -1,7 +1,7 @@
 import React, { ChangeEvent, FC, SyntheticEvent, useState } from "react";
 import Todo from "../Todo/Todo";
 
-interface Props {
+interface TodoFormProps {
   reminder: string;
   date: string;
   handleReminderUpdate: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -9,13 +9,13 @@ interface Props {
   handleButtonClick: (e: SyntheticEvent) => void;
 }
 
-const TodoForm: React.FC<Props> = ({
+const TodoForm: React.FC<TodoFormProps> = ({
   reminder,
   date,
   handleReminderUpdate,
   handleDateUpdate,
   handleButtonClick,
-}: Props): JSX.Element => {
+}: TodoFormProps): JSX.Element => {
   // Renders JSX.
   return (
     <div>
