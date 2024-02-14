@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.data;
 using api.dtos;
+using api.helpers;
 using api.interfaces;
 using api.mappers;
 using api.models;
@@ -26,9 +27,9 @@ namespace api.controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
         {
-            var todos = await _repo.GetAllAsync();
+            var todos = await _repo.GetAllAsync(query);
             return Ok(todos);
         }
 
