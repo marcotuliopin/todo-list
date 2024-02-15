@@ -22,6 +22,7 @@ const TodoList: React.FC<TodoListProps> = ({
 
   return (
     <div className="todoList">
+      <h2><strong>Lista de Lembretes</strong></h2>
       <ul>
         {data.map((t, index) => (
           <li key={uuidv4()}>

@@ -21,6 +21,7 @@ const TodoForm: React.FC<TodoFormProps> = ({
   // Renders JSX.
   return (
     <div>
+      <h2><strong>Novo Lembrete</strong></h2>
       <form className="TodoForm" id="TodoForm" onSubmit={handleFormSubmit}>
         <input
           type="text"

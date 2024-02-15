@@ -1,10 +1,12 @@
 import axios from "axios";
 import { TodoSearch } from "./todo";
 
+axios.defaults.baseURL = 'http://localhost:5155';
+
 // Send a Get request to the API
 export const fetchAllData = async (): Promise<TodoSearch[]> => {
   try {
-    const response = await axios.get("http://localhost:5155/api/todo/getall");
+    const response = await axios.get("/api/todo/getall");
     return response.data;
   } catch (err) {
     throw err;
@@ -18,7 +20,7 @@ export const createTodo = async (content: string, date: Date): Promise<TodoSearc
     Date: date.toISOString(),
   };
   try {
-    const response = await axios.post("http://localhost:5155/api/todo/create", data)
+    const response = await axios.post("/api/todo/create", data)
     return response.data;
   } catch (err) {
     throw err;
@@ -28,7 +30,7 @@ export const createTodo = async (content: string, date: Date): Promise<TodoSearc
 // Send a DELETE request to the API
 export const deleteTodo = async (todoId: string) => {
   try {
-    await axios.delete(`http://localhost:5155/api/todo/delete/${todoId}`)
+    await axios.delete(`/api/todo/delete/${todoId}`)
   } catch (err) {
     throw err;
   } 
