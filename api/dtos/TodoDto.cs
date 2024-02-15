@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace api.dtos
 {
-    public class CreateTodoRequestDto
+    public class TodoDto
     {
         public string Content { get; set; } = string.Empty;
         public DateTime Date { get; set; } = DateTime.Now;

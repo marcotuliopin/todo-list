@@ -55,7 +55,7 @@ namespace api.repositories
             return await _context.Todos.FindAsync(id);
         }
 
-        public async Task<Todo?> UpdateAsync(int id, UpdateTodoRequestDto updateDto)
+        public async Task<Todo?> UpdateAsync(int id, TodoDto updateDto)
         {
             var todoModel = await _context.Todos.FirstOrDefaultAsync(x => x.Id == id);
 

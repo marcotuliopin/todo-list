@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace api.controllers
 {
-    [Route("api/todo")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class TodoController : ControllerBase
     {
@@ -30,7 +30,10 @@ namespace api.controllers
         public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
         {
             var todos = await _repo.GetAllAsync(query);
-            return Ok(todos);
+
+            var todoDtos = todos.Select(x => x.ToTodoDtoFromTodo()).ToList(); 
+
+            return Ok(todoDtos);
         }
 
         [HttpGet("{id:int}")]
@@ -39,20 +42,20 @@ namespace api.controllers
             var todo = await _repo.GetByIdAsync(id);
             if (todo == null)
                 return NotFound();
-            return Ok(todo);
+            return Ok(todo.ToTodoDtoFromTodo());
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateTodoRequestDto createDto)
+        public async Task<IActionResult> Create([FromBody] TodoDto createDto)
         {
-            var todoModel = createDto.ToTodoFromCreateDto();
+            var todoModel = createDto.ToTodoFromTodoDto();
             await _repo.CreateAsync(todoModel);
             return CreatedAtAction(nameof(GetById), new { id = todoModel.Id }, todoModel);
         }
 
         [HttpPut]
         [Route("{id:int}")]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateTodoRequestDto updateDto)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] TodoDto updateDto)
         {
             var todoModel = await _repo.UpdateAsync(id, updateDto);
             if (todoModel == null)

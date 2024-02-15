@@ -1,85 +1,99 @@
 import React, { ChangeEvent, SyntheticEvent, useState } from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import TodoForm from "./components/TodoForm/TodoForm";
-import Todo from "./components/Todo/Todo";
 import TodoList from "./components/TodoList/TodoList";
+import { TodoSearch } from "./todo";
+import { formatDateField, validateDate } from "./helpers/parseInput";
+import { createTodo, fetchAllData } from "./api";
+import { parseDataFromApi } from "./helpers/parseData";
 
 function App() {
-  const [reminder, setReminder] = useState<string>("");
+  const [content, setContent] = useState<string>("");
   const [date, setDate] = useState<string>("");
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [data, setData] = useState<TodoSearch[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  // Updates state when user inputs new data on reminder field.
-  const handleReminderUpdate = (e: ChangeEvent<HTMLInputElement>) => {
-    setReminder(e.target.value);
+  // Updates state when user inputs new data on content field.
+  const handleContentUpdate = (e: ChangeEvent<HTMLInputElement>) => {
+    setContent(e.target.value);
   };
 
   // Updates state when user inputs new data on date field.
   const handleDateUpdate = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e);
-    const inputValue = e.target.value;
-    let formattedValue = formatDate(inputValue);
+    const formattedValue = formatDateField(e.target.value);
     setDate(formattedValue);
   };
 
-  // Format the date input field while the user types.
-  const formatDate = (input: string): string => {
-    let formattedValue = input
-      .replace(/\D/g, "")
-      .replace(/(\d{2})(\d{2})?(\d{4})?/, "$1/$2/$3") // Autocompletes '/' on input field.
-      .slice(0, 10); // Ensures input is at most 10 characters long.
+  // Adds a new todo to the list.
+  const handleFormSubmit = async (e: SyntheticEvent) => {
+    e.preventDefault();
 
-    // Automatically removes '/' when user deletes data.
-    let lastChar = formattedValue[formattedValue.length - 1];
-    if (lastChar != "/") return formattedValue;
-    while (formattedValue[formattedValue.length - 1] == "/")
-      formattedValue = formattedValue.slice(0, -1);
-    return formattedValue;
+    const parsedDate = validateDate(date);
+    console.log(parsedDate);
+    if (parsedDate == null) {
+      console.log("Wrong date.");
+      return;
+    }
+
+    try {
+      await createTodo(content, parsedDate);
+    } catch (err) {
+      console.error("Error while trying to add todo to the list: ", err);
+      return;
+    }
+
+    setContent("");
+    setDate("");
+
+    const updatedData = [...data, { content, date }];
+    setData(
+      updatedData.sort(function (a, b) {
+        return new Date(a.date).valueOf() - new Date(b.date).valueOf();
+      })
+    );
   };
 
-  // Adds a new todo to the list.
-  const handleButtonClick = (e: SyntheticEvent) => {
-    // const result = await createTodo(reminder, date);
-    // setTodos([...todos, result]);
-    e.preventDefault();
-    console.log(e);
-    console.log(todos);
-    setTodos((prevTodos) => [
-      ...prevTodos,
-      { id: uid(), reminder: reminder, date: date },
-    ]);
+  // Removes a Todo when it is marked as complete
+  const handleTodoDone = async (e: SyntheticEvent) => {
+
+  }
+
+  // Load list of Todos
+  const fetchAllDataFromApi = async () => {
+    setLoading(true);
+    try {
+      const response = await fetchAllData();
+      setData(
+        response.map((todo) => ({
+          ...todo,
+          date: parseDataFromApi(todo.date),
+        }))
+      );
+    } catch (err) {
+      console.error("Error loading list: ", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="App">
       <TodoForm
-        reminder={reminder}
+        content={content}
         date={date}
-        handleReminderUpdate={handleReminderUpdate}
+        loading={loading}
+        handleContentUpdate={handleContentUpdate}
         handleDateUpdate={handleDateUpdate}
-        handleButtonClick={handleButtonClick}
+        handleFormSubmit={handleFormSubmit}
       />
       <div className="todoList">
-        <ul>
-          {todos.map((todo) => (
-            <li key={todo.id}>
-              <Todo id={todo.id} reminder={todo.reminder} date={todo.date} />
-            </li>
-          ))}
-        </ul>
-        <TodoList todos={todos} />
+        <TodoList
+          fetchAllDataFromApi={fetchAllDataFromApi}
+          handleTodoDone={handleTodoDone}
+          data={data}
+        />
       </div>
     </div>
-  );
-}
-
-function uid() {
-  return (
-    Date.now().toString(36) +
-    Math.floor(
-      Math.pow(10, 12) + Math.random() * 9 * Math.pow(10, 12)
-    ).toString(36)
   );
 }
 

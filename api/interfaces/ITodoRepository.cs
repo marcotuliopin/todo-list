@@ -13,7 +13,7 @@ namespace api.interfaces
         Task<List<Todo>> GetAllAsync(QueryObject query);
         Task<Todo?> GetByIdAsync(int id);
         Task<Todo> CreateAsync(Todo todoModel);
-        Task<Todo?> UpdateAsync(int id, UpdateTodoRequestDto updateDto);
+        Task<Todo?> UpdateAsync(int id, TodoDto updateDto);
         Task<Todo?> DeleteAsync(int id);
     }
 }

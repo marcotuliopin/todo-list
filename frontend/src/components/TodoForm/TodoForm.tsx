@@ -2,33 +2,37 @@ import React, { ChangeEvent, FC, SyntheticEvent, useState } from "react";
 import Todo from "../Todo/Todo";
 
 interface TodoFormProps {
-  reminder: string;
+  content: string;
   date: string;
-  handleReminderUpdate: (e: ChangeEvent<HTMLInputElement>) => void;
+  loading: boolean;
+  handleContentUpdate: (e: ChangeEvent<HTMLInputElement>) => void;
   handleDateUpdate: (e: ChangeEvent<HTMLInputElement>) => void;
-  handleButtonClick: (e: SyntheticEvent) => void;
+  handleFormSubmit: (e: SyntheticEvent) => void;
 }
 
 const TodoForm: React.FC<TodoFormProps> = ({
-  reminder,
+  content,
   date,
-  handleReminderUpdate,
+  loading,
+  handleContentUpdate,
   handleDateUpdate,
-  handleButtonClick,
+  handleFormSubmit,
 }: TodoFormProps): JSX.Element => {
   // Renders JSX.
   return (
     <div>
-      <form className="TodoForm" id="TodoForm">
+      <form className="TodoForm" id="TodoForm" onSubmit={handleFormSubmit}>
         <input
           type="text"
+          id="contentInput"
           className="todoInput"
-          value={reminder}
+          value={content}
           placeholder="Nome do lembrete"
-          onChange={(e) => handleReminderUpdate(e)}
+          onChange={(e) => handleContentUpdate(e)}
         />
         <input
           type="text"
+          id="dateInput"
           className="todoInput"
           value={date}
           placeholder="dd/mm/aaaa"
@@ -36,13 +40,13 @@ const TodoForm: React.FC<TodoFormProps> = ({
         />
         <span id="dateError" className="error"></span>
         <br />
-        <button
-          type="submit"
-          className="todoSubmit"
-          onClick={(e) => handleButtonClick(e)}
-        >
-          Criar
-        </button>
+        {loading ? (
+          <div>Carregando...</div>
+        ) : (
+          <button type="submit" className="todoSubmit">
+            Criar
+          </button>
+        )}
       </form>
     </div>
   );
