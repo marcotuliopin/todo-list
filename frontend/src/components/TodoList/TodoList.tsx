@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Todo from "../Todo/Todo";
 import { v4 as uuidv4 } from "uuid";
 import { TodoSearch } from "../../todo";
+import "./TodoList.css"
 
 interface TodoListProps {
   fetchAllDataFromApi: () => void;

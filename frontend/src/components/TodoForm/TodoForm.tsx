@@ -1,5 +1,5 @@
 import React, { ChangeEvent, FC, SyntheticEvent, useState } from "react";
-import Todo from "../Todo/Todo";
+import "./TodoForm.css";
 
 interface TodoFormProps {
   content: string;

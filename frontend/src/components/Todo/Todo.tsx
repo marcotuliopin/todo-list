@@ -1,5 +1,6 @@
 import React from "react";
 import { TodoSearch } from "../../todo";
+import "./Todo.css";
 
 interface TodoProps {
   body: TodoSearch;
@@ -13,9 +14,7 @@ const Todo: React.FC<TodoProps> = ({
   return (
     <div className="todo">
       <p className="content">{body.content}</p>
-      <button type="submit" className="doneCheck" onClick={() => handleTodoDone(body.id)}>
-        Feito
-      </button>
+      <input className="deleteTodoButton" type="image" src="remove-todo.png" onClick={() => handleTodoDone(body.id)}/>
     </div>
   );
 };
