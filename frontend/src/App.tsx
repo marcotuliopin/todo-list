@@ -4,8 +4,8 @@ import TodoForm from "./components/TodoForm/TodoForm";
 import TodoList from "./components/TodoList/TodoList";
 import { TodoSearch } from "./todo";
 import { formatDateField, validateDate } from "./helpers/parseInput";
-import { createTodo, fetchAllData } from "./api";
-import { parseDataFromApi } from "./helpers/parseData";
+import { createTodo, deleteTodo, fetchAllData } from "./api";
+import { parseDateFromApi, sortByDate } from "./helpers/parseData";
 
 function App() {
   const [content, setContent] = useState<string>("");
@@ -29,14 +29,18 @@ function App() {
     e.preventDefault();
 
     const parsedDate = validateDate(date);
-    console.log(parsedDate);
     if (parsedDate == null) {
       console.log("Wrong date.");
       return;
     }
 
     try {
-      await createTodo(content, parsedDate);
+      let newTodo = await createTodo(content, parsedDate);
+      newTodo.date = parseDateFromApi(newTodo.date);
+      const updatedData = [...data, newTodo].sort(function (a, b) {
+        return sortByDate(a, b);
+      });
+      setData(updatedData);
     } catch (err) {
       console.error("Error while trying to add todo to the list: ", err);
       return;
@@ -44,19 +48,18 @@ function App() {
 
     setContent("");
     setDate("");
-
-    const updatedData = [...data, { content, date }];
-    setData(
-      updatedData.sort(function (a, b) {
-        return new Date(a.date).valueOf() - new Date(b.date).valueOf();
-      })
-    );
   };
 
   // Removes a Todo when it is marked as complete
-  const handleTodoDone = async (e: SyntheticEvent) => {
-
-  }
+  const handleTodoDone = async (todoId: string) => {
+    try {
+      deleteTodo(todoId);
+    } catch (err) {
+      console.error("Error while trying to delete todo: ", err);
+      return;
+    }
+    setData(data.filter((todo) => todo.id !== todoId));
+  };
 
   // Load list of Todos
   const fetchAllDataFromApi = async () => {
@@ -66,7 +69,7 @@ function App() {
       setData(
         response.map((todo) => ({
           ...todo,
-          date: parseDataFromApi(todo.date),
+          date: parseDateFromApi(todo.date),
         }))
       );
     } catch (err) {

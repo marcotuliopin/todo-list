@@ -31,9 +31,7 @@ namespace api.controllers
         {
             var todos = await _repo.GetAllAsync(query);
 
-            var todoDtos = todos.Select(x => x.ToTodoDtoFromTodo()).ToList(); 
-
-            return Ok(todoDtos);
+            return Ok(todos);
         }
 
         [HttpGet("{id:int}")]
@@ -46,11 +44,11 @@ namespace api.controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] TodoDto createDto)
+        public async Task<Todo> Create([FromBody] TodoDto createDto)
         {
             var todoModel = createDto.ToTodoFromTodoDto();
             await _repo.CreateAsync(todoModel);
-            return CreatedAtAction(nameof(GetById), new { id = todoModel.Id }, todoModel);
+            return todoModel;
         }
 
         [HttpPut]

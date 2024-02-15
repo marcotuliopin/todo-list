@@ -1,6 +1,7 @@
 import axios from "axios";
 import { TodoSearch } from "./todo";
 
+// Send a Get request to the API
 export const fetchAllData = async (): Promise<TodoSearch[]> => {
   try {
     const response = await axios.get("http://localhost:5155/api/todo/getall");
@@ -10,24 +11,25 @@ export const fetchAllData = async (): Promise<TodoSearch[]> => {
   }
 };
 
-export const createTodo = async (content: string, date: Date) => {
-  // Send a POST request to the API
+// Send a POST request to the API
+export const createTodo = async (content: string, date: Date): Promise<TodoSearch> => {
   const data = {
     Content: content,
     Date: date.toISOString(),
   };
   try {
-    axios
-      .post("http://localhost:5155/api/todo/create", data)
-      .then((response) => {
-        console.log("Todo created:", response.data);
-        // Handle successful response here (e.g., update state)
-      })
-      .catch((error) => {
-        console.error("Error creating todo:", error);
-        // Handle error here (e.g., display an error message)
-      });
+    const response = await axios.post("http://localhost:5155/api/todo/create", data)
+    return response.data;
   } catch (err) {
     throw err;
   }
+};
+
+// Send a DELETE request to the API
+export const deleteTodo = async (todoId: string) => {
+  try {
+    await axios.delete(`http://localhost:5155/api/todo/delete/${todoId}`)
+  } catch (err) {
+    throw err;
+  } 
 };

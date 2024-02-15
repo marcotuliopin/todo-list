@@ -1,5 +1,5 @@
-export interface TodoSearch 
-{
-    content: string;
-    date: string;
+export interface TodoSearch {
+  id: string;
+  content: string;
+  date: string;
 }

@@ -1,21 +1,19 @@
-import React, { SyntheticEvent } from "react";
+import React from "react";
 import { TodoSearch } from "../../todo";
 
 interface TodoProps {
-  id: string;
-  result: TodoSearch;
-  handleTodoDone: (e: SyntheticEvent) => void;
+  body: TodoSearch;
+  handleTodoDone: (todoId: string) => void;
 }
 
 const Todo: React.FC<TodoProps> = ({
-  id,
-  result,
+  body,
   handleTodoDone,
 }: TodoProps): JSX.Element => {
   return (
     <div className="todo">
-      <p className="content">{result.content}</p>
-      <button type="submit" className="doneCheck" onClick={handleTodoDone}>
+      <p className="content">{body.content}</p>
+      <button type="submit" className="doneCheck" onClick={() => handleTodoDone(body.id)}>
         Feito
       </button>
     </div>
