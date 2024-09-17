@@ -1,40 +1,49 @@
 # Todo List
-### Marco Túlio de Pinho
+------------------------
+
+Marco Túlio de Pinho
+
+A reminder list in React and .Net.
+
+## Specifications
+-------------------------
+
+Software developed using .Net SDK 8.0.0; Microsoft.AspNetCore.App 8.0.1; NodeJs 18.16.0.
+
+We used SqlServer for the database implementation, using a local server.
+
+## Components
 --------------------------
 
-Uma lista de lembretes em React e .Net.
-
-## Especificações
--------------------
-Programa desenvolvido utilizando .Net SDK 8.0.0; Microsoft.AspNetCore.App 8.0.1; NodeJs 18.16.0.
-
-Utilizamos do SqlServer para a implementação do banco de dados, utilizando do servidor local.
-
-## Componentes
---------------------
 ### Todo
-Representa um lembrete. Possui um corpo com **id**, **conteúdo** e **data**, e uma função responsável por remover o lembrete ao ser concluído.
-### TodoForm
-Representa o formulário de criação de um novo lembrete. Possui o **conteúdo do lembrete** e **data** para criação do lembrete, **loading** para captar se o formulário está em carregamento, e as funções para 
-cuidar de alterações no caompo do conteúdo, da data ou no caso do envio do formulário.
-### TodoList
-Se encarrega da renderização da lista de conteúdos, de acordo com os requerimentos do projeto.
-### App
-Possui a lógica para a execução da funcionalidade dos demais componentes.
 
-Separamos funções auxiliares para o diretório **helpers** para maior organização do projeto.
+Represents a reminder. It has a body with id, content, and date, and a function responsible for removing the reminder when it's completed.
+
+### TodoForm
+
+
+Represents the form to create a new reminder. It possesses the reminder content and date for creating the reminder, loading to capture whether the form is loading, and functions to handle changes in the content field, the date, or in the case of form submission.
+
+### TodoList
+
+
+Responsible for rendering the list of contents, according to project requirements.
+
+### App
+
+Holds the logic for executing the functionality of the other components.
+
+We separated auxiliary functions into the helpers directory for better organization of the project.
 
 ## API
----------------------
-A API possui um controlador, que trata dos requerimentos de GET, POST, PUT e DELETE de *Todo*s do banco de dados.
+------------------------------
 
-O *Todo* é um modelo que possui um **id**, um **conteúdo** e uma **data**. Definimos uma interface chamada **ITodoRepository** e uma classe que a implementa (**TodoRepository**) para extrair lógica do controlador,
-melhorando a organização do código e a separação de funções.
+The API has a controller, which handles GET, POST, PUT, and DELETE requirements of Todos from the database.
 
-## Como Utilizar
----------------------
-Como foi utilizado um servidor local para executar o programa, é necessário alterar as chaves que ligam ao mesmo. Primeiramente, modifique a string de conexão no arquivo /api/appsettings.json. Descomente a linha (remove os dois "//") e substitua
-{PCNAME} e {DATABASENAME} de acordo com sua configuração.
-Após isso, em /frontend/source/api.tsx, edite a linha "axios.defaults.baseURL = " e substitua a URL que se segue pela URL da porta que a API está usando.
+The Todo is a model that has an id, content, and date. We defined an interface named ITodoRepository and a class that implements it (TodoRepository) to extract logic from the controller, improving the code organization and function separation.
 
-Para iniciar a API, vá ao diretório /api e use o comando **dotnet watch run**. Através do Swagger, é possível obter a URL da porta. Para iniciar o frontend, vá ao diretório /frontend e use o comando **npm start**.
+## How to Use
+------------------------
+Since a local server was used to run the program, it is necessary to change the keys that link to it. First, modify the connection string in the /api/appsettings.json file. Uncomment the line (remove the two "//") and replace {PCNAME} and {DATABASENAME} according to your configuration. After this, in /frontend/source/api.tsx, edit the "axios.defaults.baseURL = " line and replace the following URL with the URL of the port the API is using.
+
+To start the API, go to the /api directory and use the command dotnet watch run. Through Swagger, you can obtain the port's URL. To start the frontend, go to the /frontend directory and use the command npm start.
